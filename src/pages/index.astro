@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
 import Farms from '../components/Farms.astro';
 import farms from '../data/farms.json';
 ---
 
 <Layout>
+  <Hero slot="hero"></Hero>
   <div class="p-6">
     <Farms farms={farms} />
   </div>

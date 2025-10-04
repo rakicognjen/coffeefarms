@@ -1,0 +1,33 @@
+---
+// HomeHero.astro
+const slide = Astro.props.slide || {
+  image: "/profile-images/coffefarm01.jpg",
+  title: "Coffe Farms Explorer",
+  subtitle: "Find and connect with sustainable coffee farms around the world",
+};
+---
+
+<section class="relative w-full h-[70vh] md:h-[70vh]">
+  <!-- Background Image -->
+  <div 
+    class="absolute inset-0 w-full h-full bg-cover bg-center"
+    style={`background-image: url('${slide.image}')`}
+  ></div>
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/30"></div>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 flex flex-col justify-center h-full max-w-2xl px-6 md:px-12 lg:px-24 text-white">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">{slide.title}</h1>
+    <p class="text-lg md:text-2xl mb-6 drop-shadow-md">{slide.subtitle}</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="#farms-container" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-colors">
+        Explore Farms
+      </a>
+      <a href="/list-your-farm" class="inline-block bg-white text-emerald-600 hover:bg-emerald-100 font-semibold px-6 py-3 rounded-lg shadow-lg transition-colors">
+        List Your Farm
+      </a>
+    </div>
+  </div>
+</section>

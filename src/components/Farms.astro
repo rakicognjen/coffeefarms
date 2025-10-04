@@ -24,7 +24,7 @@ const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean))
 
 <div id="farms-container" class="flex flex-col md:flex-row gap-8">
   <!-- Filters -->
-  <aside class="md:w-1/4 p-6 bg-white rounded-2xl shadow-md sticky top-10 h-max flex flex-col gap-4">
+  <aside class="md:w-1/4 p-6 bg-white rounded-2xl shadow-md desktop-only: md:sticky top-10 h-max flex flex-col gap-4">
     <input
       id="search"
       type="text"
@@ -83,6 +83,7 @@ const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean))
         {farm.website && (
           <a
             href={farm.slug}
+
             class="mt-2 text-emerald-600 hover:text-emerald-800 font-medium text-sm"
           >
             Visit Profile →
