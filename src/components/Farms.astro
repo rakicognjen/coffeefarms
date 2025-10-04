@@ -83,11 +83,9 @@ const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean))
         {farm.website && (
           <a
             href={farm.slug}
-            target="_blank"
-            rel="noopener noreferrer"
             class="mt-2 text-emerald-600 hover:text-emerald-800 font-medium text-sm"
           >
-            Visit Website →
+            Visit Profile →
           </a>
         )}
       </div>

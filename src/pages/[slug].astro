@@ -1,0 +1,27 @@
+---
+
+import Layout from '../layouts/Layout.astro';
+import Profile from '../components/Profile.astro';
+import farms from '../data/farms.json';
+
+
+export async function getStaticPaths() {
+  return farms.map((farm) => ({
+    params: { slug: farm.slug },
+    props: { farm }
+  }));
+}
+
+
+const { farm } = Astro.props;
+
+
+const heroTitle = farm.name;
+const heroSubtitle = farm.location;
+---
+
+<Layout>
+  <div class="p-6 max-w-5xl mx-auto">
+    <Profile farm={farm} />
+  </div>
+</Layout>
