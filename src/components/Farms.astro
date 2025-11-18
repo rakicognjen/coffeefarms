@@ -1,10 +1,12 @@
 ---
+import { Image } from "astro:assets";
+
 export interface Farm {
   slug: string;
   name: string;
   location: string;
   description: string;
-  image: string;
+  image: string; // filename only, e.g. "farm01.jpg"
   altitude?: string;
   variety?: string;
   certifications?: string[];
@@ -17,9 +19,23 @@ export interface Props {
 
 const { farms } = Astro.props;
 
-// Build unique filters (used in the client script too)
-const locations = Array.from(new Set(farms.map(f => f.location)));
-const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean)));
+// 1) Load all profile images automatically
+const images = import.meta.glob("/src/assets/profile-images/*.{jpg,jpeg,png}", {
+  eager: true,
+});
+
+// 2) Attach optimized image metadata to farms
+const farmsWithImages = farms.map((farm) => {
+  const path = `/src/assets/profile-images/${farm.image}`;
+  return {
+    ...farm,
+    img: images[path]?.default ?? null,
+  };
+});
+
+// Build unique filters
+const locations = Array.from(new Set(farms.map((f) => f.location)));
+const altitudes = Array.from(new Set(farms.map((f) => f.altitude).filter(Boolean)));
 ---
 
 <div id="farms-container" class="flex flex-col md:flex-row gap-8">
@@ -35,67 +51,79 @@ const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean))
     <label class="font-semibold text-gray-700">Location</label>
     <select id="location-filter" class="p-2 border rounded-lg border-gray-300">
       <option value="">All Locations</option>
-      {locations.map(loc => <option value={loc}>{loc}</option>)}
+      {locations.map((loc) => (
+        <option value={loc}>{loc}</option>
+      ))}
     </select>
 
     <label class="font-semibold text-gray-700">Altitude</label>
     <select id="altitude-filter" class="p-2 border rounded-lg border-gray-300">
       <option value="">All Altitudes</option>
-      {altitudes.map(alt => <option value={alt}>{alt}</option>)}
+      {altitudes.map((alt) => (
+        <option value={alt}>{alt}</option>
+      ))}
     </select>
   </aside>
 
   <!-- Farms Grid -->
-<div id="farm-list" class="md:w-3/4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-auto">
-  {farms.map(farm => (
-    <div
-      class="farm-card bg-white shadow-md hover:shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col"
-      data-name={farm.name.toLowerCase()}
-      data-location={farm.location}
-      data-altitude={farm.altitude}
-      data-description={farm.description.toLowerCase()}
-    >
-      <img
-        src={farm.image}
-        alt={farm.name}
-        class="w-full h-40 sm:h-44 object-cover"
-      />
-      <div class="p-4 flex flex-col gap-2 flex-1">
-        <h2 class="text-xl font-semibold text-gray-800">{farm.name}</h2>
-        <p class="text-sm text-gray-500">📍 {farm.location}</p>
-        <p class="text-gray-700 text-sm line-clamp-3">{farm.description}</p>
+  <div id="farm-list" class="md:w-3/4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-auto">
+    {farmsWithImages.map((farm) => (
+      <div
+        class="farm-card bg-white shadow-md hover:shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col"
+        data-name={farm.name.toLowerCase()}
+        data-location={farm.location}
+        data-altitude={farm.altitude}
+        data-description={farm.description.toLowerCase()}
+      >
+        {farm.img && (
+          <Image
+            src={farm.img}
+            alt={farm.name}
+            widths={[300, 600, 900]}
+            sizes="(max-width: 768px) 100vw, 33vw"
+            class="w-full h-40 sm:h-44 object-cover"
+            loading="lazy"
+          />
+        )}
 
-        <ul class="text-sm text-gray-600 space-y-1">
-          {farm.altitude && <li><span class="font-semibold">Altitude:</span> {farm.altitude}</li>}
-          {farm.variety && <li><span class="font-semibold">Variety:</span> {farm.variety}</li>}
-        </ul>
+        <div class="p-4 flex flex-col gap-2 flex-1">
+          <h2 class="text-xl font-semibold text-gray-800">{farm.name}</h2>
+          <p class="text-sm text-gray-500">📍 {farm.location}</p>
+          <p class="text-gray-700 text-sm line-clamp-3">{farm.description}</p>
 
-        {farm.certifications && farm.certifications.length > 0 && (
-          <ul class="flex flex-wrap gap-2 text-xs mt-1">
-            {farm.certifications.map(cert => (
-              <li class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
-                {cert}
-              </li>
-            ))}
+          <ul class="text-sm text-gray-600 space-y-1">
+            {farm.altitude && (
+              <li><span class="font-semibold">Altitude:</span> {farm.altitude}</li>
+            )}
+            {farm.variety && (
+              <li><span class="font-semibold">Variety:</span> {farm.variety}</li>
+            )}
           </ul>
-        )}
 
-        {farm.website && (
-          <a
-            href={farm.slug}
+          {farm.certifications && farm.certifications.length > 0 && (
+            <ul class="flex flex-wrap gap-2 text-xs mt-1">
+              {farm.certifications.map((cert) => (
+                <li class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
+                  {cert}
+                </li>
+              ))}
+            </ul>
+          )}
 
-            class="mt-2 text-emerald-600 hover:text-emerald-800 font-medium text-sm"
-          >
-            Visit Profile →
-          </a>
-        )}
+          {farm.website && (
+            <a
+              href={farm.slug}
+              class="mt-2 text-emerald-600 hover:text-emerald-800 font-medium text-sm"
+            >
+              Visit Profile →
+            </a>
+          )}
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
 </div>
 
-
-<!-- ✅ Client-side filtering logic -->
 <script>
   const searchInput = document.getElementById('search');
   const locationSelect = document.getElementById('location-filter');
@@ -107,7 +135,7 @@ const altitudes = Array.from(new Set(farms.map(f => f.altitude).filter(Boolean))
     const location = locationSelect.value;
     const altitude = altitudeSelect.value;
 
-    farmCards.forEach(card => {
+    farmCards.forEach((card) => {
       const name = card.dataset.name || '';
       const desc = card.dataset.description || '';
       const loc = card.dataset.location || '';

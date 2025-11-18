@@ -1,0 +1,80 @@
+---
+const id = Astro.props.id || 'list-farm-modal';
+---
+
+<dialog id={id} class="modal-dialog" client:load>
+  <form method="dialog" class="flex flex-col gap-4">
+    <h2 class="text-2xl font-bold mb-2">List Your Farm</h2>
+
+    <!-- Farm Name -->
+    <label class="flex flex-col">
+      Farm Name
+      <input type="text" name="name" class="border rounded p-2 mt-1" required />
+    </label>
+
+    <!-- Location -->
+    <label class="flex flex-col">
+      Location
+      <input type="text" name="location" class="border rounded p-2 mt-1" required />
+    </label>
+
+    <!-- Altitude -->
+    <label class="flex flex-col">
+      Altitude (meters)
+      <input type="number" name="altitude" class="border rounded p-2 mt-1" required />
+    </label>
+
+    <!-- Variety -->
+    <label class="flex flex-col">
+      Variety
+      <input type="text" name="variety" class="border rounded p-2 mt-1" />
+    </label>
+
+    <!-- Certifications -->
+    <label class="flex flex-col">
+      Certifications
+      <input type="text" name="certifications" class="border rounded p-2 mt-1" placeholder="e.g., Organic, Fair Trade" />
+    </label>
+
+    <!-- Description -->
+    <label class="flex flex-col">
+      Description
+      <textarea name="description" class="border rounded p-2 mt-1" rows="4" required></textarea>
+    </label>
+
+    <!-- Upload Image -->
+    <label class="flex flex-col">
+      Upload Image
+      <input type="file" name="image" accept="image/*" class="border rounded p-2 mt-1" />
+    </label>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">
+        Submit
+      </button>
+      <button type="button" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400" onclick={`document.getElementById('${id}').close()`}>
+        Cancel
+      </button>
+    </div>
+  </form>
+</dialog>
+
+<style>
+  dialog.modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 36rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: none;
+    background-color: white;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(0,0,0,0.5);
+  }
+</style>
