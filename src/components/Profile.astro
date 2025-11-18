@@ -1,5 +1,6 @@
 ---
-// src/components/Profile.astro
+import { Image } from "astro:assets";
+
 export interface Farm {
   slug: string;
   name: string;
@@ -12,16 +13,31 @@ export interface Farm {
 }
 
 const { farm } = Astro.props as { farm: Farm };
+
+// Load optimized images
+const images = import.meta.glob("/src/assets/profile-images/*.{jpg,jpeg,png}", {
+  eager: true,
+});
+
+// Resolve image metadata
+const farmImg = images[`/src/assets/profile-images/${farm.image}`]?.default;
 ---
 
 <article class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-6 md:mt-12">
+  
   <!-- Hero Image -->
-  <div class="w-full h-64 md:h-96 overflow-hidden">
-    <img 
-      src={farm.image} 
-      alt={farm.name} 
-      class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105" 
-    />
+  <div class="w-full h-64 md:h-96 overflow-hidden relative">
+    {farmImg && (
+      <Image
+        src={farmImg}
+        alt={farm.name}
+        class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+        widths={[600, 900, 1400, 2000]}
+        sizes="100vw"
+        format="webp"
+        loading="eager"
+      />
+    )}
   </div>
 
   <!-- Farm Details -->
