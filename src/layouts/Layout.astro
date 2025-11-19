@@ -1,6 +1,9 @@
 ---
 // Layout.astro
 import "../styles/global.css";
+import { Image } from "astro:assets";
+import logoSingle from "../assets/logo-single.png";
+import logoText from "../assets/logo-text.png";
 ---
 
 <!DOCTYPE html>
@@ -17,15 +20,65 @@ import "../styles/global.css";
     <!-- Header -->
     <header class="bg-white shadow sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <h1 class="text-3xl font-bold text-emerald-700">🌱 Coffee Farms Explorer</h1>
-        <nav class="space-x-6 text-gray-700 font-medium">
+        
+        <!-- Responsive Logo -->
+        <a href="/" class="flex items-center">
+          <!-- Mobile Logo -->
+          <Image
+            src={logoSingle}
+            alt="Coffee Farms Explorer logo"
+            class="h-14 w-auto md:hidden"
+            widths={[300, 400, 500]}
+            sizes="(max-width: 768px) 200px"
+            loading="eager"
+          />
+
+          <!-- Desktop Logo -->
+          <Image
+            src={logoText}
+            alt="Coffee Farms Explorer full logo"
+            class="h-16 w-auto hidden md:block"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 768px) 300px"
+            loading="eager"
+          />
+        </a>
+
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex space-x-6 text-gray-700 font-medium">
           <a href="#" class="hover:text-emerald-600 transition-colors">Home</a>
           <a href="#farms" class="hover:text-emerald-600 transition-colors">Farms</a>
           <a href="#about" class="hover:text-emerald-600 transition-colors">About</a>
           <a href="#contact" class="hover:text-emerald-600 transition-colors">Contact</a>
         </nav>
+
+        <!-- Mobile Hamburger -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
+
+      <!-- Mobile Menu -->
+      <nav id="mobileMenu" class="md:hidden hidden px-6 pb-4 bg-white shadow-inner text-gray-700 font-medium space-y-3">
+        <a href="#" class="block py-2 hover:text-emerald-600 transition-colors">Home</a>
+        <a href="#farms" class="block py-2 hover:text-emerald-600 transition-colors">Farms</a>
+        <a href="#about" class="block py-2 hover:text-emerald-600 transition-colors">About</a>
+        <a href="#contact" class="block py-2 hover:text-emerald-600 transition-colors">Contact</a>
+      </nav>
     </header>
+
+    <script>
+      const btn = document.getElementById('mobileMenuBtn');
+      const menu = document.getElementById('mobileMenu');
+
+      btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    </script>
+
 
     <!-- Hero Slot (full-width) -->
     <slot name="hero" />
