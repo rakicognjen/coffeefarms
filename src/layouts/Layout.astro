@@ -4,6 +4,7 @@ import "../styles/global.css";
 import { Image } from "astro:assets";
 import logoSingle from "../assets/logo-single.png";
 import logoText from "../assets/logo-text.png";
+import logoFooter from "../assets/logo-footer.png";
 ---
 
 <!DOCTYPE html>
@@ -25,7 +26,7 @@ import logoText from "../assets/logo-text.png";
         <a href="/" class="flex items-center">
           <!-- Mobile Logo -->
           <Image
-            src={logoSingle}
+            src={logoText}
             alt="Coffee Farms Explorer logo"
             class="h-14 w-auto md:hidden"
             widths={[300, 400, 500]}
@@ -87,11 +88,24 @@ import logoText from "../assets/logo-text.png";
     <main class="flex-1 max-w-7xl mx-auto w-full px-6 py-12">
       <slot />
     </main>
-
+        
     <!-- Footer -->
     <footer class="bg-white shadow-inner mt-12">
-      <div class="max-w-7xl mx-auto px-6 py-6 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} Coffee Farms Explorer. All rights reserved.
+      <div class="max-w-7xl mx-auto px-6 py-8 text-center text-gray-500 text-sm flex flex-col items-center gap-4">
+        <!-- Footer Logo -->
+        <Image
+          src={logoFooter}
+          alt="Coffee Farms Explorer Logo"
+          class="h-24 w-24 object-contain"
+          widths={[150, 200, 300]}
+          sizes="150px"
+          loading="eager"
+        />
+
+        <!-- Copyright -->
+        <div>
+          © {new Date().getFullYear()} Coffee Farms Explorer. All rights reserved.
+        </div>
       </div>
     </footer>
 
