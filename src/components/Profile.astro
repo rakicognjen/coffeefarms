@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 
+
 export interface Farm {
   slug: string;
   name: string;
@@ -15,9 +16,10 @@ export interface Farm {
 const { farm } = Astro.props as { farm: Farm };
 
 // Load optimized images
-const images = import.meta.glob("/src/assets/profile-images/*.{jpg,jpeg,png}", {
-  eager: true,
-});
+const images: Record<string, { default: ImageMetadata }> = import.meta.glob(
+  "/src/assets/profile-images/*.{jpg,jpeg,png}",
+  { eager: true }
+);
 
 // Resolve image metadata
 const farmImg = images[`/src/assets/profile-images/${farm.image}`]?.default;
