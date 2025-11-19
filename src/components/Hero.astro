@@ -2,24 +2,24 @@
 import { Image } from "astro:assets";
 import ListFarmModal from "./ListFarmModal.astro";
 
-// Load all hero/profile images
-const images = import.meta.glob("/src/assets/profile-images/*.{jpg,jpeg,png}", {
+// Load all hero/profile images with proper typing
+const images = import.meta.glob<{ default: string }>("/src/assets/profile-images/*.{jpg,jpeg,png}", {
   eager: true,
 });
 
 const slide = Astro.props.slide || {
   image: "coffefarm01.jpg",
-  title: "Coffe Farms Explorer",
+  title: "Coffee Farms Explorer",
   subtitle: "Find and connect with sustainable coffee farms around the world",
 };
 
-// Resolve hero image metadata
-const heroImg = images[`/src/assets/profile-images/${slide.image}`]?.default;
+// Resolve hero image metadata safely
+const heroImg = images[`/src/assets/profile-images/${slide.image}`]?.default ?? null;
 const modalId = "list-farm-modal";
 ---
 
 <section class="relative w-full h-[70vh] md:h-[70vh] overflow-hidden">
-  <!-- Background Image (Optimized with Astro <Image />) -->
+  <!-- Background Image -->
   {heroImg && (
     <Image
       src={heroImg}
@@ -57,11 +57,12 @@ const modalId = "list-farm-modal";
       </button>
     </div>
   </div>
+</section>
 
 <ListFarmModal id={modalId} />
 
-<script client:load>
+<script>
   const btn = document.getElementById("list-farm-btn");
   const modal = document.getElementById("list-farm-modal");
-  btn.addEventListener("click", () => modal.showModal());
+  btn?.addEventListener("click", () => modal?.showModal());
 </script>

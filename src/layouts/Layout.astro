@@ -1,5 +1,4 @@
 ---
-// Layout.astro
 import "../styles/global.css";
 import { Image } from "astro:assets";
 import logoSingle from "../assets/logo-single.png";
@@ -45,7 +44,6 @@ import logoFooter from "../assets/logo-footer.png";
           />
         </a>
 
-
         <!-- Desktop Nav -->
         <nav class="hidden md:flex space-x-6 text-gray-700 font-medium">
           <a href="#" class="hover:text-emerald-600 transition-colors">Home</a>
@@ -72,14 +70,14 @@ import logoFooter from "../assets/logo-footer.png";
     </header>
 
     <script>
+      // Optional chaining fixes TS warnings
       const btn = document.getElementById('mobileMenuBtn');
       const menu = document.getElementById('mobileMenu');
 
-      btn.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
+      btn?.addEventListener('click', () => {
+        menu?.classList.toggle('hidden');
       });
     </script>
-
 
     <!-- Hero Slot (full-width) -->
     <slot name="hero" />
@@ -96,8 +94,8 @@ import logoFooter from "../assets/logo-footer.png";
         <Image
           src={logoFooter}
           alt="Coffee Farms Explorer Logo"
-          class="h-24 w-24 object-contain"
-          widths={[150, 200, 300]}
+          class="h-32 w-32 object-contain"
+          widths={[150, 200, 300, 400]}
           sizes="150px"
           loading="eager"
         />
